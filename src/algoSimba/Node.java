@@ -5,7 +5,7 @@ import java.util.List;
 
 /**
  * This is an implementation of the Node structure used by the IHUP tree structure in
- * AlgoSimba algorithm.
+ * mHUIMiner algorithm.
  * 
  * 
  * @see AlgoSimba

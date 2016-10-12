@@ -13,12 +13,12 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * This class read a transaction database and calculates statistics
- * about this transactions database, then it prints the statistics to the console.
+ * This class read a transaction dataset in SPMF format and calculates statistics
+ * about this transactions dataset, then it prints the statistics to the console.
  * <br/><br/>
  * It is modified from the stats generator in SPMF library
  * 
-* @author Philippe Fournier-Viger, Alex Peng
+* @author Philippe Fournier-Viger, modified by Alex Peng
  */
 
 public class TransactionStatsGenerator {

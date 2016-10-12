@@ -1,7 +1,7 @@
 package algoSimba;
 
 /**
- * This class represents a UtilityTuple used in the AlgoSimba
+ * This class represents a UtilityTuple used in the mHUIMiner algorithm
  * It is essentially the same as the Element of a utility list as used by the HUI-Miner algorithm.
  * 
  * @see AlgoSimba

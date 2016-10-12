@@ -5,7 +5,7 @@ import java.util.List;
 
 
 /**
- * This class represents a UtilityList as used by the AlgoSimba algorithm.
+ * This class represents a UtilityList as used by the mHUIMiner algorithm.
  *
  * @see UtilityTuple
  * @see AlgoSimba

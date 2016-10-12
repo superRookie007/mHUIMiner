@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * This is an implementation of the IHUP-Tree used by AlgoSimba. 
+ * This is an implementation of the tree structure used by mHUIMiner algorithm. 
  * The tree is ordered based on TWU in descending order
  * 
  * @see AlgoSimba

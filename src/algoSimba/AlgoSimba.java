@@ -17,11 +17,11 @@ import java.util.Map;
 
 
 /**
- * This is an implementation of the AlgoSimba algorithm. The algorithm takes transaction *
+ * This is an implementation of the mHUIMiner algorithm. The algorithm takes transaction *
  * data in SPMF format and a user specified minUtility, and outputs all the high utility itemsets.
  * <\br><\br>
  * 
- * The AlgoSimba algorithm was proposed in my Honors project on HUIM. *
+ * The mHUIMiner algorithm was developed in my Honors project on HUIM. *
  * The algorithm is a combination of the IHUP algorithm and the HUI-MINER Algorithm *
  * The details of these two algorithms are described in the following two papers: <\br><\br>
  * 
