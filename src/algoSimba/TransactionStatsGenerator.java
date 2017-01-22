@@ -13,19 +13,19 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * This class read a transaction dataset in SPMF format and calculates statistics
- * about this transactions dataset, then it prints the statistics to the console.
+ * This class reads a transaction database and calculates statistics
+ * about this transactions database, then it prints the statistics to the console.
  * <br/><br/>
  * It is modified from the stats generator in SPMF library
  * 
-* @author Philippe Fournier-Viger, modified by Alex Peng
+* @author Philippe Fournier-Viger, Alex Peng
  */
 
 public class TransactionStatsGenerator {
 	/**
 	 * This method generates statistics for a transaction database (a file)
 	 * @param path the path to the file
-	 * @param the name of the csv file to be created
+	 * @param fileName the name of the csv file to be created
 	 * @throws IOException  exception if there is a problem while reading the file.
 	 */
 	public void getStats(String path, String fileName) throws IOException {
@@ -119,11 +119,7 @@ public class TransactionStatsGenerator {
 		
 	}
 	
-	/**
-	 * This method calculate the mean of a list of integers
-	 * @param the file name of the csv file to be created
-	 * @param list the list of integers
-	 */
+
 	private static void writeCSV(String fileName, List<Integer> listSupportOfItems){
 	    //Delimiter used in CSV file
 		int belowAverSupport = 0;
@@ -175,7 +171,7 @@ public class TransactionStatsGenerator {
 
 
 	/**
-	 * This method calculate the mean of a list of integers
+	 * This method calculates the mean of a list of integers
 	 * @param list the list of integers
 	 * @return the mean 
 	 */
@@ -188,7 +184,7 @@ public class TransactionStatsGenerator {
 	}
 
 	/**
-	 * This method calculate the standard deviation of a list of integers
+	 * This method calculates the standard deviation of a list of integers
 	 * @param list the list of integers
 	 * @return the standard deviation
 	 */
@@ -202,7 +198,7 @@ public class TransactionStatsGenerator {
 	}
 
 	/**
-	 * This method calculate the mean of a list of doubles
+	 * This method calculates the mean of a list of doubles
 	 * @param list the list of doubles
 	 * @return the mean
 	 */
@@ -215,7 +211,7 @@ public class TransactionStatsGenerator {
 	}
 
 	/**
-	 * This method calculate the standard deviation of a list of doubles
+	 * This method calculates the standard deviation of a list of doubles
 	 * @param list the list of doubles
 	 * @return the standard deviation
 	 */
@@ -229,7 +225,7 @@ public class TransactionStatsGenerator {
 	}
 
 	/**
-	 * This method calculate the variance of a list of integers
+	 * This method calculates the variance of a list of integers
 	 * @param list the list of integers
 	 * @return the variance 
 	 */
@@ -243,7 +239,7 @@ public class TransactionStatsGenerator {
 	}
 
 	/**
-	 * This method return the smallest integer from a list of integers
+	 * This method returns the smallest integer from a list of integers
 	 * @param list the list of integers
 	 * @return the smallest integer 
 	 */
@@ -258,7 +254,7 @@ public class TransactionStatsGenerator {
 	}
 
 	/**
-	 * This method return the largest integer from a list of integers
+	 * This method returns the largest integer from a list of integers
 	 * @param list the list of integers
 	 * @return the largest integer 
 	 */

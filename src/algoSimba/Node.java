@@ -5,12 +5,10 @@ import java.util.List;
 
 /**
  * This is an implementation of the Node structure used by the IHUP tree structure in
- * mHUIMiner algorithm.
- * 
+ * AlgoSimba algorithm.
  * 
  * @see AlgoSimba
  * @see IHUPTreeMod
- * 
  * @author Prashant Barhate, modified by Alex Peng
  * 
  */
@@ -34,8 +32,9 @@ public class Node {
 	}
 
 	/**
-	 * method to get child node Return the immediate child of this node having a
-	 * given ID(item itself). If there is no such child, return null;
+	 * method to get child node 
+	 * Return the immediate child of this node having a given ID(item itself). 
+	 * If there is no such child, return null;
 	 */
 	Node getChildWithID(int name) {
 		// for each child node

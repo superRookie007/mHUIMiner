@@ -3,13 +3,12 @@ package algoSimba;
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
- * This class represents a UtilityList as used by the mHUIMiner algorithm.
+ * This class represents a UtilityList as used by the AlgoSimba algorithm.
  *
  * @see UtilityTuple
  * @see AlgoSimba
- * @author Philippe Fournier-Viger, slightly modified by Yuxuan(Alex) Peng
+ * @author Philippe Fournier-Viger, modified by Alex Peng
  */
 public class UtilityList {
 	final Integer itemID;
@@ -27,9 +26,19 @@ public class UtilityList {
 	public UtilityList(Integer itemID) {
 		this.itemID = itemID;
 	}
+	
+	/**
+	 * Constructor.
+	 * 			used when the itemID is not important
+	 * 
+	 */
+	public UtilityList() {
+		this.itemID = null;
+	}
+	
 
 	/**
-	 * Method to add an element to this utility list and update the sums at the
+	 * Method to add a utility tuple to this utility list and update the sums at the
 	 * same time.
 	 */
 	public void addTuple(UtilityTuple uTuple) {

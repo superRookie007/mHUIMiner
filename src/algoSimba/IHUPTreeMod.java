@@ -8,11 +8,10 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * This is an implementation of the tree structure used by mHUIMiner algorithm. 
+ * This is an implementation of the IHUP-Tree used by AlgoSimba. 
  * The tree is ordered based on TWU in descending order
  * 
  * @see AlgoSimba
- * 
  * @author Prashant Barhate, modified by Alex Peng
  */
 
@@ -24,7 +23,7 @@ public class IHUPTreeMod {
 	// flag that indicate if the tree has more than one path
 	boolean hasMoreThanOnePath = false;
 
-	// List of pairs (item, Utility) of the header table
+	// List of pairs (item, Node)
 	Map<Integer, Node> mapItemNodes = new HashMap<Integer, Node>();
 
 	// root of the tree
@@ -53,12 +52,12 @@ public class IHUPTreeMod {
 	public void addTransaction(List<Item> transaction, int tid) {
 		Node currentNode = root;
 
-		// The transaction is ordered based on TWU in ascending order
-		// But we add items in the reserve oder
+		// Because transaction is ordered based on TWU in ascending order,
+		// we add items from the tail of the transaction
 		for (int i = transaction.size() - 1; i >= 0; i--) {
 			int itemID = transaction.get(i).getItemID();
 
-			// look if there is a node already in the IHUP-Tree
+			// check if there is a node already in the IHUP-Tree
 			Node child = currentNode.getChildWithID(itemID);
 			if (child == null) {
 				// there is no node, we create a new one
@@ -86,7 +85,7 @@ public class IHUPTreeMod {
 		for (int i = localPath.size() - 1; i >= 0; i--) {
 			// new item to be inserted
 			int itemID = localPath.get(i);
-			// look if there is a node already in the tree
+			// check if there is a node already in the tree
 			Node child = currentlocalNode.getChildWithID(itemID);
 
 			if (child == null) {
@@ -125,7 +124,6 @@ public class IHUPTreeMod {
 			hasMoreThanOnePath = true;
 		}
 
-		// update the header table.
 		// check if there is already a node with this id in the header table
 		Node localheadernode = mapItemNodes.get(itemID);
 		if (localheadernode == null) {
@@ -147,12 +145,11 @@ public class IHUPTreeMod {
 	}
 
 	/**
-	 * Method for creating the list of items in the header table, in descending
+	 * Method for creating the header table for IHUP tree, in descending
 	 * order of TWU.
 	 * 
 	 * @param mapItemToTWU
-	 *            the Utilities of each item (key: item value: TWU or path
-	 *            utility)
+	 *            the TWU of each item (key: item, value: TWU)
 	 */
 	void createHeaderList(final Map<Integer, Integer> mapItemToTWU) {
 		// create an array to store the header list with

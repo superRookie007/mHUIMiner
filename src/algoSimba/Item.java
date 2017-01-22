@@ -2,12 +2,9 @@ package algoSimba;
 
 
 /**
- * This is an implementation of an Item as used by the mHUIMiner algorithm.
- * It is the same as the Item used by the UPGrowth algorithm.
- * 
+ * This is an implementation of an Item as used by the AlgoSimba class.
  * 
  * @see AlgoSimba
- * 
  * @author Prashant Barhate, modified by Alex Peng
  * 
  */

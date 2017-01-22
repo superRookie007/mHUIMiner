@@ -17,12 +17,11 @@ import java.util.Map;
 
 
 /**
- * This is an implementation of the mHUIMiner algorithm. The algorithm takes transaction *
+ * This is an implementation of the AlgoSimba algorithm. The algorithm takes transaction 
  * data in SPMF format and a user specified minUtility, and outputs all the high utility itemsets.
  * <\br><\br>
  * 
- * The mHUIMiner algorithm was developed in my Honors project on HUIM. *
- * The algorithm is a combination of the IHUP algorithm and the HUI-MINER Algorithm *
+ * The algorithm is a combination of the IHUP algorithm and the HUI-Miner algorithm 
  * The details of these two algorithms are described in the following two papers: <\br><\br>
  * 
  * Chowdhury Farhan Ahmed, Syed Khairuzzaman Tanbeer, Byeong-Soo Jeong, 
@@ -51,9 +50,9 @@ public class AlgoSimba {
 	private int minUtility = 0; // threshold
 	private int joinCount = 0; // number of times the construct method is called
 	
-	// stores TWU for each item
+	// Map TWU to each item
 	private Map<Integer, Integer> mapItemToTWU;
-	// stores utilityList for each item
+	// Map utilityList to each item
 	private Map<Integer, UtilityList> mapItemToUtilityList;
 
 	private BufferedWriter writer = null; 
@@ -66,7 +65,7 @@ public class AlgoSimba {
 	 * 
 	 * @param input path to an input file
 	 * @param output  path for writing the output file
-	 * @param minUtility  the minimum utility threshold
+	 * @param ratio  the minimum utility threshold as a ratio
 	 * @throws IOException  exception if error while reading or writing the file
 	 */
 	public void runAlgorithm(String input, String output, Double ratio) throws IOException {
@@ -128,6 +127,7 @@ public class AlgoSimba {
 			// calculate minUtility threshold
 			Double temp = totalUtility * ratio;
 			minUtility = temp.intValue();
+			System.out.println("minUtility: "+minUtility);
 
 			IHUPTreeMod tree = new IHUPTreeMod();
 
@@ -161,9 +161,9 @@ public class AlgoSimba {
 				// for that transaction
 				String utilityValues[] = split[2].split(" ");
 
-				// Create a list to store items
+				// Create revised transaction
 				List<Item> revisedTransaction = new ArrayList<Item>();
-				// for each item
+				// for each item in the original transaction
 				for (int i = 0; i < items.length; i++) {
 					// convert values to integers
 					int item = Integer.parseInt(items[i]);
@@ -212,7 +212,6 @@ public class AlgoSimba {
 			// For each item from the bottom of the header table list of the
 			// tree
 			for (int i = tree.headerList.size() - 1; i >= 0; i--) {
-				// get the itemID
 				Integer itemID = tree.headerList.get(i);
 
 				// initial itemset contains only single item
@@ -227,7 +226,7 @@ public class AlgoSimba {
 				}
 
 				// if sumIutils + ulist.sumRutilsm>= minUtility,
-				// we extend current itemset (build local tree)
+				// we expand current itemset (build local tree)
 				if ((ulist.sumIutils + ulist.sumRutils) >= minUtility) {
 					// ===== CREATE THE LOCAL TREE =====
 					IHUPTreeMod localTree = createLocalTree(tree, itemID);
@@ -276,8 +275,8 @@ public class AlgoSimba {
 	 * 
 	 * @param tree IHUPTree to mine
 	 * @param minUtility minimum utility threshold
-	 * @param prefix the prefix itemset
-	 * @param a list of UtilityTuples of the current itemset
+	 * @param itemset the prefix itemset
+	 * @param pTuples a list of UtilityTuples of the current itemset
 	 */
 	private void simbaMiner(IHUPTreeMod tree, int minUtility, ArrayList<Integer> itemset, List<UtilityTuple> pTuples)
 			throws IOException {
@@ -287,35 +286,22 @@ public class AlgoSimba {
 			Integer itemID = tree.headerList.get(i);
 			UtilityList xUL = mapItemToUtilityList.get(itemID);
 
-			// sumIutils is used to decide whether an itemset is a HUI
-			long sumIutils = 0;
-			// sumIutilRutil is used to decide whether to extend current itemset
-			long sumIutilRutil = 0;
-			long sumRutils = 0;
-
 			// extend current itemset p by item x
 			itemset.add(itemID);
 
-			// construct new utility tuple list pxTuples
-			List<UtilityTuple> pxTuples = construct(pTuples, xUL.uLists);
+			// construct new utility list pxTuples
+			UtilityList pxTuples = construct(pTuples, xUL.uLists);
 			checkMemory();
 			joinCount++;
 
-			// calculate sumIutils and sumIutilRutil
-			for (UtilityTuple uTuple : pxTuples) {
-				sumIutils += uTuple.getIutils();
-				sumRutils += uTuple.getRutils();
-			}
-			sumIutilRutil = sumIutils + sumRutils;
-
-			// if totalSumIutils >= minUtility, the itemset is a HUI
-			if (sumIutils >= minUtility) {
-				writeOut(itemset, sumIutils);
+			// if sumIutils >= minUtility, the itemset is a HUI
+			if (pxTuples.sumIutils >= minUtility) {
+				writeOut(itemset, pxTuples.sumIutils);
 			}
 
-			// if totalSumIutilRutil, we create new local prefix tree
+			// if sumIutils+sumRutils >= minUtility, we create new local prefix tree
 			// and call simbaMiner
-			if (sumIutilRutil >= minUtility) {
+			if (pxTuples.sumIutils+pxTuples.sumRutils >= minUtility) {
 				// ===== CREATE THE LOCAL TREE =====
 				IHUPTreeMod localTree = createLocalTree(tree, itemID);
 				checkMemory();
@@ -331,7 +317,7 @@ public class AlgoSimba {
 				// recursively call the simbaMiner procedure to
 				// explore other itemsets that are extensions of the current one
 				if (localTree.headerList.size() > 0) {
-					simbaMiner(localTree, minUtility, itemset, pxTuples);
+					simbaMiner(localTree, minUtility, itemset, pxTuples.uLists);
 					checkMemory();
 				}
 			} // end if
@@ -345,17 +331,17 @@ public class AlgoSimba {
 		// It consists of the set of prefix paths
 		List<List<Integer>> prefixPaths = new ArrayList<List<Integer>>();
 
-		Node path = tree.mapItemNodes.get(itemID);
+		Node pathStart = tree.mapItemNodes.get(itemID);
 
-		while (path != null) {
+		while (pathStart != null) {
 
 			// if the path is not just the root node
-			if (path.parent.itemID != -1) {
+			if (pathStart.parent.itemID != -1) {
 
 				List<Integer> prefixPath = new ArrayList<Integer>();
 
 				// add all the parents of this node to the current prefixPath
-				Node parentnode = path.parent;
+				Node parentnode = pathStart.parent;
 				while (parentnode.itemID != -1) {
 					prefixPath.add(parentnode.itemID);
 					parentnode = parentnode.parent;
@@ -364,7 +350,7 @@ public class AlgoSimba {
 				prefixPaths.add(prefixPath);
 			}
 			// We will look for the next prefixpath
-			path = path.nodeLink;
+			pathStart = pathStart.nodeLink;
 		}
 
 		// next block only for debugging
@@ -394,14 +380,14 @@ public class AlgoSimba {
 	
 
 	/**
-	 * This method constructs the utilityTuple list of pX
+	 * This method constructs the utility list of pX
 	 * @param pUL :  the list of utilityTuples of prefix P.
 	 * @param xUL : the list of utilityTuples of itemX
 	 * @return the utility list of pxUL
 	 */
-	private List<UtilityTuple> construct(List<UtilityTuple> pUL, List<UtilityTuple> xUL) {
+	private UtilityList construct(List<UtilityTuple> pUL, List<UtilityTuple> xUL) {
 		// create an empty utility list for pX
-		List<UtilityTuple> pxUL = new ArrayList<UtilityTuple>();
+		UtilityList pxUL = new UtilityList();
 
 		for (UtilityTuple ep : pUL) {
 			// do a binary search to find element ex in xUL with ep.tid = ex.tid
@@ -411,7 +397,7 @@ public class AlgoSimba {
 			}
 			UtilityTuple ePX = new UtilityTuple(ep.getTid(), ep.getIutils() + ex.getIutils(), ex.getRutils());
 			// add the new UtilityTuple to the list pxUL
-			pxUL.add(ePX);
+			pxUL.addTuple(ePX);
 		}
 		// return the utility list of pXY.
 		return pxUL;
